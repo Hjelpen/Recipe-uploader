@@ -1,0 +1,29 @@
+<main role="main">
+  <div class="container">
+    <br />
+    <br />
+    <div class="row vertical-align">
+      <div class="input-group">
+        <input type="text" class="form-control" name="searchQuery" [(ngModel)]="searchQuery" placeholder="Search..">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" (click)="Search()" type="button">Search</button>
+        </span>
+      </div>
+      <b>Sort on:&nbsp;</b>
+      <a href="#" (click)="SortNew()">Newest</a> &nbsp; | &nbsp;
+      <a href="#">Best rated</a>
+    </div>
+    <br />
+        <div class="row">
+          <div *ngFor="let item of data; let i = index">
+            <div class="card h-100" style="width: 12rem; margin-left: 1rem;">
+              <img class="card-img-top" src="/assets/{{item.imageUrl}}" height="150" width="150" alt="{{item.imageName}}">
+              <div class="card-body">
+                <h5 class="card-title">{{item.title}}</h5>
+                <a href="#" routerLinkActive="active" [routerLink]="['/recpie', item.id]" class="btn btn-primary">Read..</a>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</main>
