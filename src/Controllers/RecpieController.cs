@@ -150,15 +150,16 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       var userId = _caller.Claims.Single(c => c.Type == "id");
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
-      if (customer == null || voteViewModel.rating > 5)
+      var userRecepieRating = _appDbContext.UserRecpieVotes.Where(x => x.RecpieId == voteViewModel.id.ToString()
+      && x.UserId == customer.Identity.Id).FirstOrDefault();
+      var recpie = _appDbContext.Recepies.Where(x => x.Id == voteViewModel.id).FirstOrDefault();
+
+      if (customer == null || voteViewModel.rating > 5 || customer.Identity.Id == recpie.UserId)
       {
         return;
       }
       else
       {
-        var userRecepieRating = _appDbContext.UserRecpieVotes.Where(x => x.RecpieId == voteViewModel.id.ToString()
-         && x.UserId == customer.Identity.Id).FirstOrDefault();
-        var recpie = _appDbContext.Recepies.Where(x => x.Id == voteViewModel.id).FirstOrDefault();
 
         if (userRecepieRating == null)
         {
