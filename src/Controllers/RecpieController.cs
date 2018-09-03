@@ -42,35 +42,29 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
 
     }
 
-    // GET api/Recpie/5
+    // GET api/Recepie/5
     [HttpGet("{id}")]
     public IActionResult GetRecpie([FromQuery] int id)
     {
 
-      var result = _appDbContext.Recepies.Where(x => x.Id == id).Include(i => i.Ingridients);
+      var result = _appDbContext.Recepies.Where(x => x.Id == id).Include(i => i.Ingridients).FirstOrDefault();
 
-      Recpie recepie = new Recpie();
-
-      foreach (var item in result)
-      {
-        recepie.Content = item.Content;
-        recepie.DateTime = item.DateTime;
-        recepie.Id = item.Id;
-        recepie.ImageName = item.ImageName;
-        recepie.ImageUrl = item.ImageUrl;
-        recepie.Ingridients = item.Ingridients;
-        recepie.PostedBy = item.PostedBy;
-        recepie.Rating = item.Rating;
-        recepie.Title = item.Title;
-      }
-
-      return Ok(recepie);
+      return Ok(result);
     }
     [Route("~/api/Recpie/SortNew")]
     [HttpGet]
     public IActionResult SortNew()
     {
       var result = _appDbContext.Recepies.ToList().OrderByDescending(x => x.DateTime);
+
+      return Ok(result);
+    }
+
+    [Route("~/api/Recpie/SortRated")]
+    [HttpGet]
+    public IActionResult SortRated()
+    {
+      var result = _appDbContext.Recepies.ToList().OrderByDescending(x => x.Rating);
 
       return Ok(result);
     }
@@ -92,89 +86,89 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     }
 
     // POST api/recepie/post
+    [Route("~/api/Recpie/PostNew")]
     [HttpPost]
-    public async Task PostAsync([FromBody]NewRecpieViewModel newRecpieViewModel)
+    public async Task PostNew([FromBody]NewRecpieViewModel newRecpieViewModel)
     {
 
-      var userId = _caller.Claims.Single(c => c.Type == "id");
-      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
-
-      var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
-      var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
-      var guid = Guid.NewGuid();
-      var fileUrl = guid + newRecpieViewModel.FileName;
-      var filePath = Path.Combine(pathToData, fileUrl);
-
-      using (var ms = new MemoryStream(newRecpieViewModel.File, 0, newRecpieViewModel.File.Length))
+      if (ModelState.IsValid)
       {
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        var userId = _caller.Claims.Single(c => c.Type == "id");
+        var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
+        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
+        var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
+        var guid = Guid.NewGuid();
+        var fileUrl = guid + newRecpieViewModel.FileName;
+        var filePath = Path.Combine(pathToData, fileUrl);
+
+        using (var ms = new MemoryStream(newRecpieViewModel.File, 0, newRecpieViewModel.File.Length))
         {
-          ms.CopyTo(stream);
+          using (var stream = new FileStream(filePath, FileMode.Create))
+          {
+            ms.CopyTo(stream);
+          }
         }
+
+        Recepie recepie = new Recepie
+        {
+          UserId = customer.IdentityId,
+          ImageUrl = fileUrl,
+          ImageName = newRecpieViewModel.FileName,
+          DateTime = DateTime.UtcNow,
+          Title = newRecpieViewModel.Title,
+          PostedBy = customer.Identity.UserName,
+          Content = newRecpieViewModel.Content,
+          TotalVotes = 0,
+          Rating = 0
+        };
+
+        _appDbContext.Add(recepie);
+        _appDbContext.SaveChanges();
+
+
+        List<Ingridient> ingredient = new List<Ingridient>();
+
+        foreach (var item in newRecpieViewModel.Ingredients)
+        {
+          Ingridient ingridientItem = new Ingridient();
+          ingridientItem.Content = item;
+          ingridientItem.RecepieId = recepie.Id;
+          ingredient.Add(ingridientItem);
+        }
+
+        _appDbContext.AddRange(ingredient);
+        _appDbContext.SaveChanges();
       }
 
-       Recpie recepie = new Recpie
-      {
-        UserId = customer.IdentityId,
-        ImageUrl = fileUrl,
-        ImageName = newRecpieViewModel.FileName,
-        DateTime = DateTime.UtcNow,
-        Title = newRecpieViewModel.Title,
-        PostedBy = customer.Identity.UserName,
-        Content = newRecpieViewModel.Content,
-        TotalVotes = 0,
-        Rating = 0
-      };
-
-      _appDbContext.Add(recepie);
-      _appDbContext.SaveChanges();
-
-
-      List<Ingridient> ingredient = new List<Ingridient>();
-
-      foreach (var item in newRecpieViewModel.Ingredients)
-      {
-        Ingridient ingridientItem = new Ingridient();
-        ingridientItem.Content = item;
-        ingridientItem.RecepieId = recepie.Id;
-        ingredient.Add(ingridientItem);
-      }
-
-      _appDbContext.AddRange(ingredient);
-      _appDbContext.SaveChanges();
     }
 
-    // PUT api/<controller>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody]string value)
-    {
-    }
-
+    [Route("~/api/Recpie/PostRating")]
     [HttpPost]
-    public async Task PostRating([FromBody]int rating, int id)
+    public async Task PostRating([FromBody]VoteViewModel voteViewModel)
     {
       var userId = _caller.Claims.Single(c => c.Type == "id");
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
-      if (customer == null || rating > 5)
+      if (customer == null || voteViewModel.rating > 5)
       {
         return;
       }
       else
       {
-        var userRecepieRating = _appDbContext.UserRecpieVotes.Where(x => x.RecpieId == id.ToString()
+        var userRecepieRating = _appDbContext.UserRecpieVotes.Where(x => x.RecpieId == voteViewModel.id.ToString()
          && x.UserId == customer.Identity.Id).FirstOrDefault();
-          var recpie = _appDbContext.Recepies.Where(x => x.Id == id).FirstOrDefault();
+        var recpie = _appDbContext.Recepies.Where(x => x.Id == voteViewModel.id).FirstOrDefault();
 
         if (userRecepieRating == null)
         {
           UserRecpieVote userRecpieVote = new UserRecpieVote
           {
-            RecpieId = id.ToString(),
+            RecpieId = voteViewModel.id.ToString(),
             UserId = customer.Identity.Id,
-            Score = rating
+            Score = voteViewModel.rating
           };
-          recpie.Rating = recpie.Rating + rating;
+          recpie.Rating = recpie.Rating + voteViewModel.rating;
           recpie.TotalVotes = recpie.TotalVotes + 1;
 
           _appDbContext.Update(recpie);
@@ -183,8 +177,8 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
         }
         else
         {
-          recpie.Rating = recpie.Rating - userRecepieRating.Score + rating;
-          userRecepieRating.Score = rating;
+          recpie.Rating = recpie.Rating - userRecepieRating.Score + voteViewModel.rating;
+          userRecepieRating.Score = voteViewModel.rating;
 
           _appDbContext.Update(recpie);
           _appDbContext.Update(userRecepieRating);
@@ -196,11 +190,11 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
 
     // DELETE api/<controller>/5
     [HttpDelete("{id}")]
-    public async Task<List<Recpie>> Delete([FromQuery] int deleteId)
+    public async Task<List<Recepie>> Delete([FromQuery] int deleteId)
     {
       var userId = _caller.Claims.Single(c => c.Type == "id");
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
-      var recpie = _appDbContext.Recepies.Where(x => x.Id == deleteId).FirstOrDefault<Recpie>();
+      var recpie = _appDbContext.Recepies.Where(x => x.Id == deleteId).FirstOrDefault<Recepie>();
 
       if (recpie.UserId == customer.Identity.Id)
       {

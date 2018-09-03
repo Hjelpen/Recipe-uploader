@@ -129,7 +129,7 @@ namespace AngularASPNETCore2WebApiAuth.Migrations
                     b.ToTable("Ingridients");
                 });
 
-            modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Recipe", b =>
+            modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Recepie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -290,7 +290,7 @@ namespace AngularASPNETCore2WebApiAuth.Migrations
 
             modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Ingridient", b =>
                 {
-                    b.HasOne("AngularASPNETCore2WebApiAuth.Models.Entities.Recipe")
+                    b.HasOne("AngularASPNETCore2WebApiAuth.Models.Entities.Recepie")
                         .WithMany("Ingridients")
                         .HasForeignKey("RecepieId")
                         .OnDelete(DeleteBehavior.Cascade);

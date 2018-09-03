@@ -15,18 +15,14 @@ export class RecpieService {
       .map(response => response.json());
   }
 
-  postRating(item, id) {
+  postRating(data) {
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let authToken = localStorage.getItem('auth_token');
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    let data = {
-      Rating: item,
-      Id: id
-    };
-    return this.http.post('http://localhost:5000/api/Recpie/PostRating', { params: data, headers })
+    return this.http.post('http://localhost:5000/api/Recpie/PostRating', data, { headers })
       .map(response => response.json());
   }
 }

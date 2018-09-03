@@ -39,7 +39,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       var userId = _caller.Claims.Single(c => c.Type == "id");
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
-      IEnumerable<Recpie> recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.IdentityId).AsEnumerable();
+      IEnumerable<Recepie> recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.IdentityId).AsEnumerable();
     
       return Ok(recpieList);
     }

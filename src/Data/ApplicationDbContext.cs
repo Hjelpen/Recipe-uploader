@@ -13,7 +13,7 @@ namespace AngularASPNETCore2WebApiAuth.Data
         }
 
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Recpie> Recepies { get; set; }
+        public DbSet<Recepie> Recepies { get; set; }
         public DbSet<Ingridient> Ingridients { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserRecpieVote> UserRecpieVotes { get; set; }

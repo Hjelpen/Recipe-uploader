@@ -19,6 +19,11 @@ export class HomeService {
       .map(response => response.json());
   }
 
+  getSortedRating() {
+    return this.http.get('http://localhost:5000/api/Recpie/SortRated')
+      .map(response => response.json());
+  }
+
   getSearch(searchQuery) {
    let data = { SearchQuery: searchQuery };
     return this.http.get('http://localhost:5000/api/Recpie/Search', { params: data })

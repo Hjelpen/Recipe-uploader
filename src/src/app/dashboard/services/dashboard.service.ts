@@ -40,7 +40,7 @@ export class DashboardService extends BaseService {
     let authToken = localStorage.getItem('auth_token');
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    return this.http.post('http://localhost:5000/api/Recpie', newrecepie, { headers })
+    return this.http.post('http://localhost:5000/api/Recpie/PostNew', newrecepie, { headers })
       .map(response => response.json())
       .catch(this.handleError);
   }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AngularASPNETCore2WebApiAuth.Models.Entities
 {
-  public class Recpie
+  public class Recepie
   {
     public int Id { get; set; }
 

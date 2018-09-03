@@ -5,5 +5,8 @@ export interface RecpieDetail {
   imageUrl: string;
   imageName: string;
   postedBy: string;
+  rating: number;
+  totalVotes: number;
+  averageRating: number;
 
 }

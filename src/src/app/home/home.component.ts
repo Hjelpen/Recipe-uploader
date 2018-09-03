@@ -29,6 +29,13 @@ export class HomeComponent {
     })
   };
 
+  SortRated() {
+    this.homeService.getSortedRating().subscribe((homeDetails: HomeDetails) => {
+      this.data = homeDetails;
+      console.log(this.data);
+    })
+  };
+
   Search() {
     this.homeService.getSearch(this.searchQuery).subscribe((homeDetails: HomeDetails) => {
       this.data = homeDetails;

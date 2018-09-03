@@ -11,11 +11,13 @@ import { ClickEvent, HoverRatingChangeEvent, RatingChangeEvent } from 'angular-s
 })
 export class RecpieComponent implements OnInit {
 
-  id: string = "";
   recpieDetail: RecpieDetail;
   data: any;
   onClickResult: ClickEvent;
   recpieId = this.route.snapshot.paramMap.get('id');
+  clickRating: number = 0;
+  id: number = 0;
+
 
   constructor(private route: ActivatedRoute, private recpieService: RecpieService) { }
 
@@ -25,16 +27,22 @@ export class RecpieComponent implements OnInit {
 
   getRecpie() {
     this.recpieService.getRecpieId(this.recpieId).subscribe((recpieDetail: RecpieDetail) => {
+      recpieDetail.averageRating = recpieDetail.rating / recpieDetail.totalVotes;
+      console.log(recpieDetail.totalVotes)
       this.data = recpieDetail;
-
-      console.log(this.data);
       });
   }
 
   onClick = ($event: ClickEvent) => {
-    console.log('onClick $event: ', $event);
+    this.clickRating = $event.rating;
+    this.id = parseInt(this.recpieId);
 
-    this.recpieService.postRating($event, this.recpieId).subscribe();
+    let data = {
+      Rating: this.clickRating,
+      Id: this.id
+    };
+
+    this.recpieService.postRating(data).subscribe();
   };
 
 }

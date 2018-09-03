@@ -11,8 +11,8 @@ using System;
 namespace AngularASPNETCore2WebApiAuth.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180901171013_Newest")]
-    partial class Newest
+    [Migration("20180901220718_New")]
+    partial class New
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,7 +130,7 @@ namespace AngularASPNETCore2WebApiAuth.Migrations
                     b.ToTable("Ingridients");
                 });
 
-            modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Recipe", b =>
+            modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Recepie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -291,7 +291,7 @@ namespace AngularASPNETCore2WebApiAuth.Migrations
 
             modelBuilder.Entity("AngularASPNETCore2WebApiAuth.Models.Entities.Ingridient", b =>
                 {
-                    b.HasOne("AngularASPNETCore2WebApiAuth.Models.Entities.Recipe")
+                    b.HasOne("AngularASPNETCore2WebApiAuth.Models.Entities.Recepie")
                         .WithMany("Ingridients")
                         .HasForeignKey("RecepieId")
                         .OnDelete(DeleteBehavior.Cascade);
