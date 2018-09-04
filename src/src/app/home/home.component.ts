@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HomeService } from '../home/home.service';
 import { HomeDetails } from '../dashboard/models/home.details.interface';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +18,6 @@ export class HomeComponent {
   ngOnInit() {
     this.homeService.getRecpies().subscribe((homeDetails: HomeDetails) => {
       this.data = homeDetails;
-      console.log(homeDetails)
     })
   };
 

@@ -46,11 +46,11 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     [HttpGet("{id}")]
     public IActionResult GetRecpie([FromQuery] int id)
     {
-
       var result = _appDbContext.Recepies.Where(x => x.Id == id).Include(i => i.Ingridients).FirstOrDefault();
 
       return Ok(result);
     }
+
     [Route("~/api/Recpie/SortNew")]
     [HttpGet]
     public IActionResult SortNew()

@@ -3,4 +3,6 @@ export interface HomeDetails {
   imageUrl: string;
   imageName: string;
   id: string;
+  totalVotes: number;
+  rating: number;
 }

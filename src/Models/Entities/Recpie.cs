@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
     public string PostedBy { get; set; }
     public DateTime DateTime { get; set; }
 
+    [JsonIgnore]
     public string UserId { get; set; }
   }
 }
