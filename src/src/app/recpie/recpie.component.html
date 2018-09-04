@@ -1,12 +1,15 @@
 <div class="container">
   <div class="col-md-12 text-center">
     <h1>{{data.title}}</h1>
-    <star-rating [rating]="data.averageRating" size="large" staticColor="ok" (starClickChange)="onClick($event)" [numOfStars]="5"></star-rating>
+    <div class="row justify-content-center">
+      <star-rating [rating]="data.averageRating" size="large" staticColor="ok" (starClickChange)="onClick($event)" [numOfStars]="5"></star-rating>
+      ({{data.totalVotes}})
+    </div>
+    <div>
+      <img src="/assets/{{data.imageUrl}}" class="img-responsive" style="width:80%" alt="{{data.imageName}}" />
+    </div>
   </div>
   <br />
-  <div class="col-md-12 text-center">
-    <img src="/assets/{{data.imageUrl}}" height="300" width="300" alt="{{data.imageName}}" />
-  </div>
 </div>
   <hr />
   <div class="container">
