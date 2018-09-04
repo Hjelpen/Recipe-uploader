@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Title } from '@angular/platform-browser';
@@ -6,6 +6,7 @@ import { FormsModule  } from '@angular/forms';
 import { DashboardService } from '../services/dashboard.service';
 import { error } from 'protractor';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ok } from 'assert';
 
 @Component({
   selector: 'app-newrecepie',
@@ -26,8 +27,9 @@ export class NewrecepieComponent implements OnInit {
   filestring: string = "";
   fileName: string = "";
   fileType: string = "";
+  errors: string;
 
-  constructor(private dashboardService: DashboardService, private router: Router) {
+  constructor(private dashboardService: DashboardService, private router: Router, private zone: NgZone) {
   }
 
   ngOnInit() {
@@ -79,13 +81,12 @@ export class NewrecepieComponent implements OnInit {
       "fileName": this.fileName,
       "fileType": this.fileType
     };
-
+    debugger;
     this.dashboardService.addNewRecepie(formData)
-      .subscribe(
-        result => {
-          if (result) {
-            this.router.navigate(['/dashboard/home']);
-          }
-        });
-  }
+      .subscribe(result => {
+        return this.zone.run(() => this.router.navigate(['/dashboard/home']));
+      },
+       error => this.errors = error);
+    }
 }
+

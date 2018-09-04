@@ -41,8 +41,6 @@ export class DashboardService extends BaseService {
     headers.append('Authorization', `Bearer ${authToken}`);
 
     return this.http.post('http://localhost:5000/api/Recpie/PostNew', newrecepie, { headers })
-      .map(response => response.json())
-      .catch(this.handleError);
   }
 
   deleteRecpie(id) {

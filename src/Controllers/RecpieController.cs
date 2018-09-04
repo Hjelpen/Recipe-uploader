@@ -95,20 +95,26 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       {
         var userId = _caller.Claims.Single(c => c.Type == "id");
         var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+        var fileUrl = "";
 
-        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
-        var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
-        var guid = Guid.NewGuid();
-        var fileUrl = guid + newRecpieViewModel.FileName;
-        var filePath = Path.Combine(pathToData, fileUrl);
-
-        using (var ms = new MemoryStream(newRecpieViewModel.File, 0, newRecpieViewModel.File.Length))
+        if(newRecpieViewModel.File != null && newRecpieViewModel.File.Length > 0)
         {
-          using (var stream = new FileStream(filePath, FileMode.Create))
+          var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
+          var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
+          var guid = Guid.NewGuid();
+          fileUrl = guid + newRecpieViewModel.FileName;
+          var filePath = Path.Combine(pathToData, fileUrl);
+
+          using (var ms = new MemoryStream(newRecpieViewModel.File, 0, newRecpieViewModel.File.Length))
           {
-            ms.CopyTo(stream);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+              ms.CopyTo(stream);
+              stream.Dispose();
+            }
+            ms.Dispose();
           }
-        }
+        }     
 
         Recepie recepie = new Recepie
         {
@@ -204,16 +210,20 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
         _appDbContext.Remove(recpie);
         _appDbContext.RemoveRange(ingredients);
 
-        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
-        var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
-        var filePath = Path.Combine(pathToData, recpie.ImageUrl);
-        System.IO.File.Delete(filePath);
+        if(!string.IsNullOrEmpty(recpie.ImageUrl))
+        {
+          var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
+          var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
+          var filePath = Path.Combine(pathToData, recpie.ImageUrl);
+
+          System.IO.File.Delete(filePath);
+        }
 
         await _appDbContext.SaveChangesAsync();
 
       }
 
-      var recpieList = _appDbContext.Recepies.ToList();
+      var recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.Identity.Id).ToList();
 
       return recpieList;
     }
