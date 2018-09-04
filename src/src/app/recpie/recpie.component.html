@@ -1,27 +1,36 @@
 <div class="container">
-  <div class="row">
+  <div class="col-md-12 text-center">
     <h1>{{data.title}}</h1>
-    <star-rating [rating]="data.averageRating"  size="large" staticColor="ok" (starClickChange)="onClick($event)" [numOfStars]="5"></star-rating>
+    <star-rating [rating]="data.averageRating" size="large" staticColor="ok" (starClickChange)="onClick($event)" [numOfStars]="5"></star-rating>
   </div>
   <br />
-  <img src="/assets/{{data.imageUrl}}" height="300" width="300" alt="{{data.imageName}}" />
-  <div>
-    <br />
-    <h3>Instructions:</h3>
-    <div>
-      {{data.content}}
-      <div>
+  <div class="col-md-12 text-center">
+    <img src="/assets/{{data.imageUrl}}" height="300" width="300" alt="{{data.imageName}}" />
+  </div>
+</div>
+  <hr />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
         <h3>Ingredients:</h3>
-        <ul>
-          <li *ngFor="let ingredient of data.ingridients;">
-            {{ingredient.content}}
-          </li>
-        </ul>
+            <table class="table table-striped">
+              <tbody>
+                <tr *ngFor="let ingredient of data.ingridients;">
+                  <th scope="row"></th>
+                  <td>{{ingredient.content}}</td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+      <div class="col-md-6">
+            <h3>Instructions:</h3>
+            {{data.content}}
       </div>
     </div>
+    <br />
+    <br />
   </div>
   <div class="float-lg-right">
     <b>Posted at:</b> {{ data.dateTime | date }} <br />
     <b>By user:</b> {{data.postedBy}} <br />
   </div>
-</div>
