@@ -44,6 +44,22 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       IEnumerable<Recepie> recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.IdentityId).AsEnumerable();
     
       return Ok(recpieList);
+
+    }
+    [Route("~/api/Dashboard/GetProfile")]
+    public async Task<UserViewModel> GetProfile()
+    {
+
+      var userId = _caller.Claims.Single(c => c.Type == "id");
+      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+      var appuser = _appDbContext.Users.Where(x => x.Id == customer.IdentityId).FirstOrDefault();
+
+      UserViewModel userViewModel = new UserViewModel();
+
+      userViewModel.UserName = appuser.UserName;
+      userViewModel.PictureUrl = appuser.PictureUrl;
+
+      return userViewModel;
     }
 
     [Route("~/api/Dashboard/ProfilePicture")]

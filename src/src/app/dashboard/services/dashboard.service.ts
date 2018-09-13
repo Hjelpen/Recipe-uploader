@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 
 import { HomeDetails } from '../models/home.details.interface';
+import { UserInformation } from '../models/user.information.interface';
 import { ConfigService } from '../../shared/utils/config.service';
 
 import { BaseService } from '../../shared/services/base.service';
@@ -61,6 +62,17 @@ export class DashboardService extends BaseService {
     headers.append('Authorization', `Bearer ${authToken}`);
 
     return this.http.post('http://localhost:5000/api/Dashboard/ProfilePicture', formData, { headers })
+  }
+
+  getProfile(): Observable<UserInformation> {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    return this.http.get('http://localhost:5000/api/Dashboard/GetProfile', { headers })
+      .map(response => response.json())
+      .catch(this.handleError);
   }
 
 }

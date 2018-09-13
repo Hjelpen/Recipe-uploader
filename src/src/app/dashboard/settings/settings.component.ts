@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UserInformation } from '../models/user.information.interface';
 
 @Component({
   selector: 'app-settings',
@@ -9,6 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+
+  userInformation: UserInformation;
 
   imageSrc: string = "";
   url = '';
@@ -24,6 +27,13 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.dashboardService.getProfile()
+      .subscribe((userInformation: UserInformation) => {
+        this.data = userInformation;
+        console.log(this.data);
+      },
+        error => {
+        });
   }
 
   onSelectFile(event, files: FileList) {
