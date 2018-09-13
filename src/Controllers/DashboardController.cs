@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AngularASPNETCore2WebApiAuth.Data;
 using AngularASPNETCore2WebApiAuth.Models.Entities;
+using AngularASPNETCore2WebApiAuth.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,5 +45,65 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     
       return Ok(recpieList);
     }
+
+    [Route("~/api/Dashboard/ProfilePicture")]
+    [HttpPost]
+    public async Task<string> SaveProfilePicture([FromBody]ProfilePictureViewModel profilePictureViewModel)
+    {
+      var userId = _caller.Claims.Single(c => c.Type == "id");
+      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
+      if(!string.IsNullOrEmpty(customer.Identity.PictureUrl))
+      {
+        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
+        var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets/profilepicture"));
+        var filePath = Path.Combine(pathToData, customer.Identity.PictureUrl);
+
+        System.IO.File.Delete(filePath);
+
+        var profileUrl = SaveImage(profilePictureViewModel);
+        customer.Identity.PictureUrl = profileUrl;
+      }
+      else
+      {
+        var profileUrl = SaveImage(profilePictureViewModel);
+        customer.Identity.PictureUrl = profileUrl;
+      }
+
+      _appDbContext.SaveChanges();
+
+      return customer.Identity.PictureUrl;
+    }
+
+    public string SaveImage(ProfilePictureViewModel profilePictureViewModel)
+    {
+      var fileUrl = "";
+
+      if (profilePictureViewModel.File != null && profilePictureViewModel.File.Length > 0)
+      {
+        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
+        var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets/profilepicture"));
+        var guid = Guid.NewGuid();
+        fileUrl = guid + profilePictureViewModel.FileName;
+        var filePath = Path.Combine(pathToData, fileUrl);
+
+        using (var ms = new MemoryStream(profilePictureViewModel.File, 0, profilePictureViewModel.File.Length))
+        {
+          using (var stream = new FileStream(filePath, FileMode.Create))
+          {
+            ms.CopyTo(stream);
+            stream.Dispose();
+          }
+          ms.Dispose();
+        }
+
+        return fileUrl;
+
+      }
+
+      return fileUrl;
+    }
   }
+
+
 }

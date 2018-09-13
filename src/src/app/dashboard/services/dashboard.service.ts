@@ -54,5 +54,14 @@ export class DashboardService extends BaseService {
       .map(response => response.json())
   }
 
+  saveProfilePicture(formData) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    return this.http.post('http://localhost:5000/api/Dashboard/ProfilePicture', formData, { headers })
+  }
+
 }
 

@@ -10,31 +10,33 @@
           <label for="content">Instructions</label>
           <textarea class="form-control" [(ngModel)]="content" rows="5" id="content" name="content" placeholder="Instructions for the recipe.." required></textarea>
         </div>
-        <div class="form-group">
-          <label for="ingredient">Ingredients</label>
-          <input type="text" class="form-control" [(ngModel)]="ingredient" name="ingredient" id="ingredient" placeholder="ingredient" />
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label for="ingredient">Ingredients</label>
+            <input type="text" class="form-control" [(ngModel)]="ingredient" name="ingredient" id="ingredient" placeholder="ingredient" />
+            <br />
+            <button type="button" class="btn btn-primary" (click)="addingredient()">Add</button>
+          </div>        
+          </div>
+          <ul>
+            <li *ngFor="let ingredient of ingredients; let i = index">
+              {{ ingredient }} <button type="button" (click)="removeingredient(i)" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </li>
+          </ul>
           <br />
-          <button type="button" class="btn btn-primary" (click)="addingredient()">Add new ingredient</button>
-        </div>
-        <ul>
-          <li *ngFor="let ingredient of ingredients; let i = index">
-            {{ ingredient }} <button type="button" (click)="removeingredient(i)" class="close" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </li>
-        </ul>
-        <br />
-        <div class="form-group">
-          <label for="picture">Picture</label>
-          <img [src]="url" height="200"> <br />
+          <div class="form-group">
+            <label for="picture">Picture</label>
+            <img [src]="url" height="200"> <br />
+            <br />
+            <input type='file' name="file" (change)="onSelectFile($event)" ngModel>
+          </div>
           <br />
-          <input type='file' name="file" (change)="onSelectFile($event)" ngModel>
-        </div>
-        <br />
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save!</button>
-        </div>
-      </form>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save!</button>
+          </div>
+</form>
     </div>
   </div>
 </div>

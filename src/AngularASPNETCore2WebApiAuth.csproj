@@ -13,6 +13,7 @@
     <None Remove="src\app\dashboard\newrecepie\newrecepie.service.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\assets\profilepicture\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
