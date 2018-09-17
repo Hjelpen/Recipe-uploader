@@ -17,5 +17,6 @@ namespace AngularASPNETCore2WebApiAuth.Data
         public DbSet<Ingridient> Ingridients { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserRecpieVote> UserRecpieVotes { get; set; }
+        public DbSet<UserFollower> UserFollowers { get; set; }
     }
 }

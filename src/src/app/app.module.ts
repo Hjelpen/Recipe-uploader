@@ -21,6 +21,7 @@ import { ConfigService } from './shared/utils/config.service';
 import { RecpieComponent } from './recpie/recpie.component';
 import { RecpieService } from './recpie/recpie.service';
 import { HomeService } from './home/home.service';
+import { UserService } from './user/user.service';
 import { UserComponent } from './user/user.component';
 
 @NgModule({
@@ -40,7 +41,7 @@ import { UserComponent } from './user/user.component';
     routing,
     StarRatingModule.forRoot()
   ],
-  providers: [ConfigService, RecpieService, HomeService, { 
+  providers: [ConfigService, RecpieService, HomeService, UserService, { 
     provide: XHRBackend, 
     useClass: AuthenticateXHRBackend,
   }],

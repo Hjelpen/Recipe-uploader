@@ -1,3 +1,4 @@
+using AngularASPNETCore2WebApiAuth.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace AngularASPNETCore2WebApiAuth.ViewModels
   {
     public string UserName { get; set; }
     public string PictureUrl { get; set; }
+    public List<Recepie> Recepies { get; set; }
+    public List<UserFollower> UserFollowers { get; set; }
 
   }
 }

@@ -19,12 +19,13 @@ export class HomeComponent implements OnInit {
 
     this.dashboardService.getHomeDetails()
       .subscribe((homeDetails: HomeDetails) => {
+        console.log(homeDetails)
         homeDetails.imageUrl
         this.items = homeDetails;
         console.log(this.items);
       },
-        error => {
-          //this.notificationService.printErrorMessage(error);
+      error => {
+        console.log(error);
         });
 
   }
