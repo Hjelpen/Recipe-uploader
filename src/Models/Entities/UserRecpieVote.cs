@@ -9,10 +9,10 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
   {
     public int Id { get; set; }
 
-    public string UserId { get; set; }
-    public string RecpieId { get; set; }
-
+    public string RecpieId { get; internal set; }
     public int Score { get; set; }
 
+    public string IdentityId { get; set; }
+    public AppUser Identity { get; set; }
   }
 }

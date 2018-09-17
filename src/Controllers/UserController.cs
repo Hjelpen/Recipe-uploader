@@ -32,14 +32,13 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     public async Task<UserViewModel> Get([FromQuery]string username)
     {
       //Get info for the user being viewed
-      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.UserName == username);
-      var recpies = _appDbContext.Recepies.Where(x => x.Id == customer.Identity.Id.ToString()).ToList();    
+      var customer = await _appDbContext.Customers.Include(c => c.Identity).Include(x => x.Identity.Recepies).SingleAsync(c => c.Identity.UserName == username);    
 
       UserViewModel userViewModel = new UserViewModel
       {
         PictureUrl = customer.Identity.PictureUrl,
         UserName = customer.Identity.UserName,
-        Recepies = recpies,
+        Recepies = customer.Identity.Recepies,
 
       };
 

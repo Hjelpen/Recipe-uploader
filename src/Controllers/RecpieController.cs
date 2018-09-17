@@ -121,7 +121,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
 
         Recepie recepie = new Recepie
         {
-          UserId = customer.IdentityId,
+          IdentityId = customer.IdentityId,
           ImageUrl = fileUrl,
           ImageName = newRecpieViewModel.FileName,
           DateTime = DateTime.UtcNow,
@@ -161,10 +161,10 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
       var userRecepieRating = _appDbContext.UserRecpieVotes.Where(x => x.RecpieId == voteViewModel.id.ToString()
-      && x.UserId == customer.Identity.Id).FirstOrDefault();
+      && x.IdentityId == customer.Identity.Id).FirstOrDefault();
       var recpie = _appDbContext.Recepies.Where(x => x.Id == voteViewModel.id).FirstOrDefault();
 
-      if (customer == null || voteViewModel.rating > 5 || customer.Identity.Id == recpie.UserId)
+      if (customer == null || voteViewModel.rating > 5 || customer.Identity.Id == recpie.IdentityId)
       {
         return;
       }
@@ -176,7 +176,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
           UserRecpieVote userRecpieVote = new UserRecpieVote
           {
             RecpieId = voteViewModel.id.ToString(),
-            UserId = customer.Identity.Id,
+            IdentityId = customer.Identity.Id,
             Score = voteViewModel.rating
           };
           recpie.Rating = recpie.Rating + voteViewModel.rating;
@@ -204,21 +204,28 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     public async Task<List<Recepie>> Delete([FromQuery] int deleteId)
     {
       var userId = _caller.Claims.Single(c => c.Type == "id");
-      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
-      var recpie = _appDbContext.Recepies.Where(x => x.Id == deleteId).FirstOrDefault<Recepie>();
+      var customer = await _appDbContext.Customers.Include(c => c.Identity)
+        .Include(x => x.Identity.Recepies.Where(y => y.Id == deleteId))
+        .SingleAsync(c => c.Identity.Id == userId.Value);
 
-      if (recpie.UserId == customer.Identity.Id)
+      Recepie recepie = new Recepie();
+      foreach (var item in customer.Identity.Recepies)
+      {
+        recepie = item;
+      }
+
+      if (recepie.IdentityId == customer.Identity.Id)
       {
         var ingredients = _appDbContext.Ingridients.Where(x => x.RecepieId == deleteId).ToList();
 
-        _appDbContext.Remove(recpie);
+        _appDbContext.Remove(recepie);
         _appDbContext.RemoveRange(ingredients);
 
-        if(!string.IsNullOrEmpty(recpie.ImageUrl))
+        if(!string.IsNullOrEmpty(recepie.ImageUrl))
         {
           var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
           var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
-          var filePath = Path.Combine(pathToData, recpie.ImageUrl);
+          var filePath = Path.Combine(pathToData, recepie.ImageUrl);
 
           System.IO.File.Delete(filePath);
         }
@@ -227,7 +234,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
 
       }
 
-      var recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.Identity.Id).ToList();
+      var recpieList = _appDbContext.Recepies.Where(x => x.IdentityId == customer.Identity.Id).ToList();
 
       return recpieList;
     }

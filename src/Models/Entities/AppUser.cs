@@ -9,9 +9,12 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
   {
     // Extended Properties
     public string FirstName { get; set; }
-
     public string LastName { get; set; }
     public string PictureUrl { get; set; }
+
+    public List<Recepie> Recepies { get; set; }
+    public List<UserFollower> UserFollowers { get; set; }
+    public List<UserRecpieVote> UserRecpieVotes { get; set; }
 
   }
 }

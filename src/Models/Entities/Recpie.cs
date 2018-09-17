@@ -14,7 +14,6 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
     public string Content { get; set; }
     public string ImageUrl { get; set; }
     public string ImageName { get; set; }
-    public List <Ingridient> Ingridients { get; set; }
 
     public int Rating { get; set; }
     public int TotalVotes { get; set; }
@@ -22,7 +21,11 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
     public DateTime DateTime { get; set; }
     public int TotalViews { get; set; }
 
+    public List<Ingridient> Ingridients { get; set; }
+
     [JsonIgnore]
-    public string UserId { get; set; }
+    public string IdentityId { get; set; }
+    [JsonIgnore]
+    public AppUser Identity { get; set; }
   }
 }

@@ -9,7 +9,9 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
   {
     public int Id { get; set; }
 
-    public AppUser Identity { get; set; } // navigation prop
+    public string IdentityId { get; set; }
+    public AppUser Identity { get; set; }
+
     public string FollowerId { get; set; }
   }
 }

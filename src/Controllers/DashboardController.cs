@@ -35,17 +35,20 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
 
     // GET api/dashboard/home
     [HttpGet]
-    public async Task<IActionResult> Home()
+    public async Task<List<Recepie>> Home()
     {
-
       var userId = _caller.Claims.Single(c => c.Type == "id");
-      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+      var customer = await _appDbContext.Customers.Include(c => c.Identity).Include(y => y.Identity.Recepies).SingleAsync(c => c.Identity.Id == userId.Value);
 
-      IEnumerable<Recepie> recpieList = _appDbContext.Recepies.Where(x => x.UserId == customer.IdentityId).AsEnumerable();
-    
-      return Ok(recpieList);
+      List<Recepie> recepies = new List<Recepie>();
+      foreach (var item in customer.Identity.Recepies)
+      {
+        recepies.Add(item);
+      }
 
+      return recepies.ToList();
     }
+
     [Route("~/api/Dashboard/GetProfile")]
     public async Task<UserViewModel> GetProfile()
     {
