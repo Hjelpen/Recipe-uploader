@@ -35,5 +35,6 @@
   </div>
   <div class="float-lg-right">
     <b>Posted at:</b> {{ data.dateTime | date }} <br />
-    <b>By user:</b> {{data.postedBy}} <br />
+    <b>By user:</b> <a href="#" routerLinkActive="active" [routerLink]="['/user', data.postedBy]">{{data.postedBy}}</a>
+    <br />
   </div>

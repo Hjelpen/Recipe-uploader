@@ -20,6 +20,7 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
     public int TotalVotes { get; set; }
     public string PostedBy { get; set; }
     public DateTime DateTime { get; set; }
+    public int TotalViews { get; set; }
 
     [JsonIgnore]
     public string UserId { get; set; }

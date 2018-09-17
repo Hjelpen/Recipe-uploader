@@ -21,13 +21,15 @@ import { ConfigService } from './shared/utils/config.service';
 import { RecpieComponent } from './recpie/recpie.component';
 import { RecpieService } from './recpie/recpie.service';
 import { HomeService } from './home/home.service';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
-    RecpieComponent,    
+    RecpieComponent,
+    UserComponent,    
   ],
   imports: [
     AccountModule,

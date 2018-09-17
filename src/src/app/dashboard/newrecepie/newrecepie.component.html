@@ -1,42 +1,41 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
-      <form (ngSubmit)="saveRecpie()">
+      <form (ngSubmit)="saveRecpie()" ngNativeValidate>
         <div class="form-group">
           <label for="title">Title</label>
-          <input type="text" class="form-control" [(ngModel)]="title" id="title" name="title" placeholder="Name for the recipe">
+          <input type="text" class="form-control" [(ngModel)]="title" [required]="true" id="title" name="title" placeholder="Name for the recipe">
         </div>
         <div class="form-group">
           <label for="content">Instructions</label>
-          <textarea class="form-control" [(ngModel)]="content" rows="5" id="content" name="content" placeholder="Instructions for the recipe.." required></textarea>
+          <textarea class="form-control" [(ngModel)]="content" [required]="true" rows="5" id="content" name="content" placeholder="Instructions for the recipe.." required></textarea>
         </div>
-        <div class="form-group row">
-          <div class="col-md-6">
-            <label for="ingredient">Ingredients</label>
-            <input type="text" class="form-control" [(ngModel)]="ingredient" name="ingredient" id="ingredient" placeholder="ingredient" />
-            <br />
+        <label for="ingredient">Ingredients</label>
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="ingredient" name="ingredient" id="ingredient" placeholder="ingredient" />
+          <span class="input-group-btn">
             <button type="button" class="btn btn-primary" (click)="addingredient()">Add</button>
-          </div>        
-          </div>
-          <ul>
-            <li *ngFor="let ingredient of ingredients; let i = index">
-              {{ ingredient }} <button type="button" (click)="removeingredient(i)" class="close" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </li>
-          </ul>
+          </span>
+        </div>
+        <ul>
+          <li *ngFor="let ingredient of ingredients; let i = index">
+            {{ ingredient }} <button type="button" (click)="removeingredient(i)" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </li>
+        </ul>
+        <br />
+        <div class="form-group">
+          <label for="picture">Upload Image</label>
+          <img [src]="url" height="200"> <br />
           <br />
-          <div class="form-group">
-            <label for="picture">Picture</label>
-            <img [src]="url" height="200"> <br />
-            <br />
-            <input type='file' name="file" (change)="onSelectFile($event)" ngModel>
-          </div>
-          <br />
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">Save!</button>
-          </div>
-</form>
+          <input type='file' name="file" (change)="onSelectFile($event)" ngModel>
+        </div>
+        <br />
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Save!</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

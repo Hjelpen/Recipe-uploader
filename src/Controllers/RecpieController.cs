@@ -48,6 +48,9 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     {
       var result = _appDbContext.Recepies.Where(x => x.Id == id).Include(i => i.Ingridients).FirstOrDefault();
 
+      result.TotalViews = result.TotalViews + 1;
+      _appDbContext.SaveChanges();
+
       return Ok(result);
     }
 
@@ -114,7 +117,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
             }
             ms.Dispose();
           }
-        }     
+        }
 
         Recepie recepie = new Recepie
         {
@@ -126,7 +129,8 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
           PostedBy = customer.Identity.UserName,
           Content = newRecpieViewModel.Content,
           TotalVotes = 0,
-          Rating = 0
+          Rating = 0,
+          TotalViews = 0     
         };
 
         _appDbContext.Add(recepie);
