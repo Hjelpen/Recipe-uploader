@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="data.pictureUrl == null; else imageUrl ">
+  <div *ngIf="data.pictureUrl == null || data.pictureUrl == ''; else imageUrl">
     <img src="/assets/profilepicture/NoProfilePick.jpg" class="img-responsive" style="width:200px;height:150px;" />
   </div>
   <ng-template #imageUrl>
@@ -18,4 +18,13 @@
       <button type="submit" class="btn btn-primary">Save!</button>
     </div>
   </form>
+</div>
+<div class="container">
+  <form (ngSubmit)="saveBioProfile()">
+      <label for="content">Bio</label>
+      <textarea class="form-control" [(ngModel)]="bio" rows="2" id="bio" name="bio" maxlength="150" placeholder="Write some short bio about yourself.."></textarea>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save!</button>
+      </div>
+    </form>
 </div>

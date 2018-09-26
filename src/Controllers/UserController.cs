@@ -39,10 +39,43 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
         PictureUrl = customer.Identity.PictureUrl,
         UserName = customer.Identity.UserName,
         Recepies = customer.Identity.Recepies,
-
+        Bio = customer.Identity.Bio
       };
 
       return userViewModel;
+    }
+
+    [Route("~/api/User/FollowUser")]
+    [HttpPost]
+    public async Task<List<UserFollower>> FollowUserAsync(string userName)
+    {
+
+      //the User who wants to follow someone.
+      var userId = _caller.Claims.Single(c => c.Type == "id");
+      var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
+      //The user that should be followed.
+      var FollowUser = await _appDbContext.Customers.Where(x => x.Identity.Email == userName).SingleAsync(c => c.Identity.Email == userName);
+
+      var checkFollow = customer.Identity.UserFollowers.Where(x => x.Identity.Id == FollowUser.Identity.Id);
+      if(checkFollow == null)
+      {
+        UserFollower userFollower = new UserFollower
+        {
+          FollowerId = FollowUser.Identity.Id,
+          IdentityId = customer.Identity.Id
+        };
+
+        _appDbContext.Add(userFollower);
+      }
+      else
+      {
+        _appDbContext.Remove(checkFollow);
+      }
+
+      _appDbContext.SaveChanges();
+
+      return customer.Identity.UserFollowers.ToList();
     }
   }
 }

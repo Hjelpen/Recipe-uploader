@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,12 +56,47 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
       var appuser = _appDbContext.Users.Where(x => x.Id == customer.IdentityId).FirstOrDefault();
 
-      UserViewModel userViewModel = new UserViewModel();
-
-      userViewModel.UserName = appuser.UserName;
-      userViewModel.PictureUrl = appuser.PictureUrl;
+      UserViewModel userViewModel = new UserViewModel
+      {
+        UserName = appuser.UserName,
+        PictureUrl = appuser.PictureUrl,
+        Bio = appuser.Bio
+      };
 
       return userViewModel;
+    }
+
+    [Route("~/api/Dashboard/SaveProfileBio")]
+    [HttpPost]
+    public IActionResult ProfileBio([FromBody]BioViewModel bio)
+    {
+      if(string.IsNullOrEmpty(bio.Bio) || bio.Bio.Length > 151)
+      {
+        return Ok();
+      }
+
+      var userId = _caller.Claims.Single(c => c.Type == "id");
+      var customer =  _appDbContext.Customers.Include(c => c.Identity).FirstOrDefault(c => c.Identity.Id == userId.Value);
+
+      if(!ModelState.IsValid)
+      {
+        return Ok();
+      }
+
+      try
+      {
+        customer.Identity.Bio = bio.Bio;
+        _appDbContext.SaveChangesAsync();
+
+      }
+      catch(Exception e)
+      {
+        System.Net.Http.HttpResponseMessage httpResponseMessage = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+        httpResponseMessage.Content = new System.Net.Http.StringContent(e.Message);
+        throw new System.Web.Http.HttpResponseException(httpResponseMessage);
+      }
+
+      return Ok(customer.Identity.Bio);
     }
 
     [Route("~/api/Dashboard/ProfilePicture")]

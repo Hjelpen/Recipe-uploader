@@ -18,6 +18,7 @@ export class HomeComponent {
   ngOnInit() {
     this.homeService.getRecpies().subscribe((homeDetails: HomeDetails) => {
       this.data = homeDetails;
+      console.log(this.data);
     })
   };
 

@@ -205,11 +205,11 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     {
       var userId = _caller.Claims.Single(c => c.Type == "id");
       var customer = await _appDbContext.Customers.Include(c => c.Identity)
-        .Include(x => x.Identity.Recepies.Where(y => y.Id == deleteId))
+        .Include(x => x.Identity.Recepies)
         .SingleAsync(c => c.Identity.Id == userId.Value);
 
       Recepie recepie = new Recepie();
-      foreach (var item in customer.Identity.Recepies)
+      foreach (var item in customer.Identity.Recepies.Where(x => x.Id == deleteId))
       {
         recepie = item;
       }

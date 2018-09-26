@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Rx';
 // Add the RxJS Observable operators we need in this app.
 import '../../rxjs-operators';
 import { NewrecepieComponent } from '../newrecepie/newrecepie.component';
+import { Binary } from 'selenium-webdriver/firefox';
 
 @Injectable()
 
@@ -64,6 +65,17 @@ export class DashboardService extends BaseService {
     return this.http.post('http://localhost:5000/api/Dashboard/ProfilePicture', formData, { headers })
   }
 
+  saveProfileBio(bio) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    let data = { Bio: bio };
+
+    return this.http.post('http://localhost:5000/api/Dashboard/SaveProfileBio', data, { headers })
+  }
+
   getProfile(): Observable<UserInformation> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -71,8 +83,7 @@ export class DashboardService extends BaseService {
     headers.append('Authorization', `Bearer ${authToken}`);
 
     return this.http.get('http://localhost:5000/api/Dashboard/GetProfile', { headers })
-      .map(response => response.json())
-      .catch(this.handleError);
+      .map(response => response.json());
   }
 
 }

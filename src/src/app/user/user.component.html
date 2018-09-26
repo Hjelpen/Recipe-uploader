@@ -1,3 +1,36 @@
-<p>
-  user works!
-</p>
+ <div class="container">
+    <div>
+      <br />
+      <div *ngIf="data.pictureUrl == null || data.pictureUrl == ''; else imageUrl ">
+        <img src="/assets/profilepicture/NoProfilePick.jpg" class="img-responsive" style="width:200px;height:150px;" />
+      </div>
+      <ng-template #imageUrl>
+        <div>
+          <img src="/assets/profilepicture/{{data.pictureUrl}}" class="img-responsive" style="width:200px;height:150px;" />
+        </div>
+      </ng-template>
+    </div>
+    <div>
+      <h3>{{data.userName}}</h3>
+      <div *ngIf="status">
+        <button type="button" (click)="Follow(data.userName)" class="btn btn-primary btn-lg">Follow</button>
+      </div>
+      <div *ngIf="!status">
+        <button type="button" class="btn btn-primary btn-lg" disabled>Follow</button>
+      </div>
+    </div>
+    <div>
+      <b>{{data.bio}}</b>
+    </div>
+  </div>
+  <div class="container">
+    <div *ngFor="let item of data.recepies; let i = index">
+      <div class="card h-100" style="width: 15rem; margin-left: 2rem;">
+        <h5 class="card-title">{{item.title}}</h5>
+        <img class="card-img-top img-responsive" src="/assets/{{item.imageUrl}}" height="150" width="150" alt="{{item.imageName}}">
+        <div class="card-body">
+          <a href="#" routerLinkActive="active" [routerLink]="['/recpie', item.id]" class="btn btn-primary">Read..</a>
+        </div>
+      </div>
+    </div>
+  </div>

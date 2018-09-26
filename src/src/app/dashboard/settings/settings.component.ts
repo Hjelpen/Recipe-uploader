@@ -21,6 +21,8 @@ export class SettingsComponent implements OnInit {
   fileType: string = "";
   errors: string;
   data: any;
+  bio: string = "";
+  bioInfo: any;
 
   constructor(private dashboardService: DashboardService, private router: Router, private zone: NgZone) {
   }
@@ -30,6 +32,7 @@ export class SettingsComponent implements OnInit {
     this.dashboardService.getProfile()
       .subscribe((userInformation: UserInformation) => {
         this.data = userInformation;
+        this.bio = userInformation.bio;
         console.log(this.data);
       },
         error => {
@@ -76,4 +79,12 @@ export class SettingsComponent implements OnInit {
       error => this.errors = error);
   }
 
+  saveBioProfile() {
+    this.dashboardService.saveProfileBio(this.bio)
+      .subscribe(result => {
+        this.bioInfo = result;
+        console.log(this.data)
+      },
+      error => this.errors = error);
+  }
 }
