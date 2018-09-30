@@ -27,6 +27,7 @@ export class UserService1 {
     headers.append('Authorization', `Bearer ${authToken}`);
 
     let data = { Username: userName };
-    return this.http.get('http://localhost:5000/api/User/FollowUser', { params: data, headers })
+    return this.http.post('http://localhost:5000/api/User/FollowUser', data, { headers })
+      .map(response => response.json());
   }
 }

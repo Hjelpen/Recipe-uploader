@@ -18,6 +18,7 @@ export class UserComponent implements OnInit {
   status: boolean;
   subscription: Subscription;
   errors: any;
+  follow: boolean;
 
   constructor(private userService1: UserService1, private route: ActivatedRoute, private userService: UserService,) { }
 
@@ -33,6 +34,7 @@ export class UserComponent implements OnInit {
   Follow(userName) {
     this.userService1.FollowUser(userName).subscribe(result => {
       console.log(result)
+      this.follow = true;
     },
       error => this.errors = error);
   }
