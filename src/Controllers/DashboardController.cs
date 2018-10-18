@@ -86,7 +86,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       try
       {
         customer.Identity.Bio = bio.Bio;
-        _appDbContext.SaveChangesAsync();
+        _appDbContext.SaveChanges();
 
       }
       catch(Exception e)

@@ -25,6 +25,7 @@
     "bootstrap": "4.1.2",
     "core-js": "^2.5.7",
     "css-star-rating": "^1.2.4",
+    "install": "^0.12.1",
     "rxjs": "^5.5.11",
     "zone.js": "^0.8.26"
   },
@@ -48,6 +49,6 @@
     "protractor": "^5.4.0",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "^3.0.0"
+    "typescript": "^2.6.2"
   }
 }

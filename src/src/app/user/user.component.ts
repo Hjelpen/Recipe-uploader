@@ -4,6 +4,7 @@ import { UserDetails } from '../shared/models/userDetail.interface';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
 import { Subscription } from 'rxjs/Subscription';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 
 @Component({
   selector: 'app-user',
@@ -18,7 +19,7 @@ export class UserComponent implements OnInit {
   status: boolean;
   subscription: Subscription;
   errors: any;
-  follow: boolean;
+  followText: string = "Follow";
 
   constructor(private userService1: UserService1, private route: ActivatedRoute, private userService: UserService,) { }
 
@@ -33,8 +34,12 @@ export class UserComponent implements OnInit {
 
   Follow(userName) {
     this.userService1.FollowUser(userName).subscribe(result => {
-      console.log(result)
-      this.follow = true;
+      if (result == true) {
+        this.followText = "Unfollow";
+      }
+      if (result == false) {
+        this.followText = "Follow";
+      }
     },
       error => this.errors = error);
   }

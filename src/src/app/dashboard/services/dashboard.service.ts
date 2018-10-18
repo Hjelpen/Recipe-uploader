@@ -74,6 +74,7 @@ export class DashboardService extends BaseService {
     let data = { Bio: bio };
 
     return this.http.post('http://localhost:5000/api/Dashboard/SaveProfileBio', data, { headers })
+      .map(response => response.json());
   }
 
   getProfile(): Observable<UserInformation> {

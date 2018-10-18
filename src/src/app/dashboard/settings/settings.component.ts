@@ -81,9 +81,9 @@ export class SettingsComponent implements OnInit {
 
   saveBioProfile() {
     this.dashboardService.saveProfileBio(this.bio)
-      .subscribe(result => {
-        this.bioInfo = result;
-        console.log(this.data)
+      .subscribe((userInformation: UserInformation) => {
+        this.bio = userInformation.bio;
+        console.log(this.data);
       },
       error => this.errors = error);
   }

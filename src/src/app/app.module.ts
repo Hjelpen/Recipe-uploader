@@ -22,7 +22,9 @@ import { RecpieComponent } from './recpie/recpie.component';
 import { RecpieService } from './recpie/recpie.service';
 import { HomeService } from './home/home.service';
 import { UserService1 } from './user/user.service';
+import { FollowerListService } from './follower-list/follower-list.service';
 import { UserComponent } from './user/user.component';
+import { FollowerListComponent } from './follower-list/follower-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { UserComponent } from './user/user.component';
     HeaderComponent,
     HomeComponent,
     RecpieComponent,
-    UserComponent,    
+    UserComponent,
+    FollowerListComponent,    
   ],
   imports: [
     AccountModule,
@@ -41,7 +44,7 @@ import { UserComponent } from './user/user.component';
     routing,
     StarRatingModule.forRoot()
   ],
-  providers: [ConfigService, RecpieService, HomeService, UserService1, { 
+  providers: [ConfigService, RecpieService, HomeService, UserService1, FollowerListService, { 
     provide: XHRBackend, 
     useClass: AuthenticateXHRBackend,
   }],

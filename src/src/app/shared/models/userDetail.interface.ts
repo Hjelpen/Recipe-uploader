@@ -3,4 +3,5 @@ export interface UserDetails {
   profileImageUrl: string;
   recpies: any[];
   bio: string;
+  follow: boolean;
 }

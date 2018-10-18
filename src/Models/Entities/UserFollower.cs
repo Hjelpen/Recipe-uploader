@@ -7,11 +7,14 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
 {
   public class UserFollower
   {
-    public int Id { get; set; }
+    public int UserFollowerId { get; set; }
 
-    public string IdentityId { get; set; }
-    public AppUser Identity { get; set; }
+
+    public string AppUserId { get; set; }
+    public virtual AppUser AppUser { get; set; }
 
     public string FollowerId { get; set; }
+    public virtual AppUser Follower { get; set; }
+
   }
 }

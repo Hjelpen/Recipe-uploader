@@ -13,10 +13,10 @@
     <div>
       <h3>{{data.userName}}</h3>
       <div *ngIf="status">
-        <button type="button" (click)="Follow(data.userName)" class="btn btn-primary btn-lg">Follow</button>
+        <button type="button" id="followButton" (click)="Follow(data.userName)" class="btn btn-primary btn-lg">{{followText}}</button>
       </div>
       <div *ngIf="!status">
-        <button type="button" class="btn btn-primary btn-lg" disabled>Follow</button>
+        <button type="button" id="followButton" class="btn btn-primary btn-lg" disabled>{{followText}}</button>
       </div>
     </div>
     <div>
