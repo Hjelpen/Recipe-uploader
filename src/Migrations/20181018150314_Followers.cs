@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -177,8 +177,7 @@ namespace AngularASPNETCore2WebApiAuth.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    IdentityId = table.Column<string>(nullable: true),
-                    Location = table.Column<string>(nullable: true)
+                    IdentityId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

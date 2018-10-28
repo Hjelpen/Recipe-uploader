@@ -81,7 +81,7 @@ export class NewrecepieComponent implements OnInit {
       "fileName": this.fileName,
       "fileType": this.fileType
     };
-    debugger;
+
     this.dashboardService.addNewRecepie(formData)
       .subscribe(result => {
         return this.zone.run(() => this.router.navigate(['/dashboard/home']));

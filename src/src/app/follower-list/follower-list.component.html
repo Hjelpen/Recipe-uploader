@@ -1,6 +1,6 @@
 <div class="container">
   <div *ngFor="let item of data; let i = index">
-    <h2>{{item.userName}}</h2>
+    <h2 href="#" routerLinkActive="active" [routerLink]="['/user', item.userName]">{{item.userName}}</h2>
     <div class="card h-100" style="width: 12rem; margin-left: 1rem;">
       <h5 class="card-title">{{item.recepie.title}}</h5>
       <img class="card-img-top" src="/assets/{{item.recepie.imageUrl}}" height="150" width="150" alt="{{item.recepie.imageName}}">

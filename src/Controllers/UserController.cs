@@ -59,7 +59,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       //The user that should be followed.
       var FollowUser = await _appDbContext.Customers.Include(c => c.Identity).Where(x => x.Identity.Email == username.username).SingleAsync(c => c.Identity.Email == username.username);
 
-      var checkFollow = _appDbContext.UserFollowers.Where(x => x.FollowerId == customer.Identity.Id).FirstOrDefault();
+      UserFollower checkFollow = _appDbContext.UserFollowers.Where(x => x.AppUserId == customer.IdentityId).Where(y => y.FollowerId == FollowUser.IdentityId).FirstOrDefault();
       if(checkFollow == null)
       {
         UserFollower userFollower = new UserFollower
@@ -74,7 +74,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       }
       else
       {
-        _appDbContext.Remove(checkFollow);
+        _appDbContext.UserFollowers.Remove(checkFollow);
         _appDbContext.SaveChanges();
         return false;
       }

@@ -7,6 +7,5 @@ namespace AngularASPNETCore2WebApiAuth.Models.Entities
         public string Id { get; set; }
         public string IdentityId { get; set; }
         public AppUser Identity { get; set; }  // navigation property
-        public string Location { get; set; }
   }
 }
