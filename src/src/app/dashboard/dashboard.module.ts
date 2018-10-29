@@ -11,6 +11,7 @@ import { DashboardService } from './services/dashboard.service';
 import { AuthGuard } from '../auth.guard';
 import { SettingsComponent } from './settings/settings.component';
 import { NewrecepieComponent } from './newrecepie/newrecepie.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NewrecepieComponent } from './newrecepie/newrecepie.component';
     CommonModule,
     FormsModule,
     routing,
-    SharedModule
+    SharedModule,
+    ImageCropperModule
   ],
   declarations: [RootComponent,HomeComponent, SettingsComponent, NewrecepieComponent],
   exports:      [ ],

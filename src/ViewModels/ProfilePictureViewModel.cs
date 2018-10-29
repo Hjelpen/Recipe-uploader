@@ -7,7 +7,7 @@ namespace AngularASPNETCore2WebApiAuth.ViewModels
 {
   public class ProfilePictureViewModel
   {
-    public byte[] File { get; set; }
+    public string File { get; set; }
     public string FileName { get; set; }
     public string FileType { get; set; }
   }

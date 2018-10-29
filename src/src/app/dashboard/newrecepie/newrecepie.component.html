@@ -27,9 +27,18 @@
         <br />
         <div class="form-group">
           <label for="picture">Upload Image</label>
-          <img [src]="url" height="200"> <br />
-          <br />
-          <input type='file' name="file" (change)="onSelectFile($event)" ngModel>
+          <input type="file" accept=".png, .jpg, .jpeg" (change)="fileChangeEvent($event)" />
+          <image-cropper [imageChangedEvent]="imageChangedEvent"
+                         [maintainAspectRatio]="true"
+                         [onlyScaleDown]="true"
+                         [aspectRatio]="16 / 9"
+                         [resizeToWidth]="1028"
+                         format="png"
+                         (imageCropped)="imageCropped($event)"
+                         (imageLoaded)="imageLoaded()"
+                         (loadImageFailed)="loadImageFailed()">
+          </image-cropper>
+          <img [src]="croppedImage" />
         </div>
         <br />
         <div class="form-group">

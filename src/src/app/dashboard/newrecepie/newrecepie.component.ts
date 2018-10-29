@@ -7,6 +7,8 @@ import { DashboardService } from '../services/dashboard.service';
 import { error } from 'protractor';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ok } from 'assert';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { ImageCroppedEvent } from 'ngx-image-cropper/src/image-cropper.component';
 
 @Component({
   selector: 'app-newrecepie',
@@ -45,31 +47,27 @@ export class NewrecepieComponent implements OnInit {
     this.ingredients.splice(index, 1);
   }
 
-  onSelectFile(event, files: FileList) {
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
 
-      reader.readAsDataURL(event.target.files[0]);
+  fileChangeEvent(event: any, files: FileList): void {
+    this.imageChangedEvent = event;
 
-      reader.onload = (imgsrc: any) => {
-        this.url = imgsrc.target.result;
+    this.files = event.target.files;
+    this.fileName = this.files[0].name;
+    this.fileType = this.files[0].type;
 
-      }
-
-      this.files = event.target.files;
-      var reader = new FileReader();
-      reader.onload = this._handleReaderLoaded.bind(this);
-      reader.readAsBinaryString(this.files[0]);
-      this.fileName = this.files[0].name;
-      this.fileType = this.files[0].type;
-    }
   }
-
-  _handleReaderLoaded(readerEvt) {
-    var binaryString = readerEvt.target.result;
-    this.filestring = btoa(binaryString);
+  imageCropped(event: ImageCroppedEvent, files: FileList) {
+    this.croppedImage = event.base64;
+    this.filestring = this.croppedImage;
+    console.log(this.fileName);
+    console.log(this.fileType)
   }
-
+  imageLoaded() {
+  }
+  loadImageFailed() {
+  }
 
   saveRecpie() {
 

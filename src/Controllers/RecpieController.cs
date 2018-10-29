@@ -100,7 +100,11 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
         var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
         var fileUrl = "";
 
-        if(newRecpieViewModel.File != null && newRecpieViewModel.File.Length > 0)
+        var t = newRecpieViewModel.File.Substring(22);
+
+        byte[] bytes = Convert.FromBase64String(t);
+
+        if (newRecpieViewModel.File != null && newRecpieViewModel.File.Length > 0)
         {
           var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
           var pathToData = Path.GetFullPath(Path.Combine(uploads, "assets"));
@@ -108,7 +112,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
           fileUrl = guid + newRecpieViewModel.FileName;
           var filePath = Path.Combine(pathToData, fileUrl);
 
-          using (var ms = new MemoryStream(newRecpieViewModel.File, 0, newRecpieViewModel.File.Length))
+          using (var ms = new MemoryStream(bytes))
           {
             using (var stream = new FileStream(filePath, FileMode.Create))
             {

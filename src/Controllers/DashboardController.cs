@@ -132,6 +132,9 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     {
       var fileUrl = "";
 
+      var t = profilePictureViewModel.File.Substring(22);
+      byte[] bytes = Convert.FromBase64String(t);
+
       if (profilePictureViewModel.File != null && profilePictureViewModel.File.Length > 0)
       {
         var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "src");
@@ -140,7 +143,7 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
         fileUrl = guid + profilePictureViewModel.FileName;
         var filePath = Path.Combine(pathToData, fileUrl);
 
-        using (var ms = new MemoryStream(profilePictureViewModel.File, 0, profilePictureViewModel.File.Length))
+        using (var ms = new MemoryStream(bytes))
         {
           using (var stream = new FileStream(filePath, FileMode.Create))
           {
