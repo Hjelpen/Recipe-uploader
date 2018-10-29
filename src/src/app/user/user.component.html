@@ -15,6 +15,9 @@
       <div *ngIf="status">
         <button type="button" id="followButton" (click)="Follow(data.userName)" class="btn btn-primary btn-lg">{{followText}}</button>
       </div>
+      <div *ngIf="!status">
+        <button type="button" id="followButton" class="btn btn-primary btn-lg" disabled>{{followText}}</button>
+      </div>
     </div>
     <div>
       <b>{{data.bio}}</b>

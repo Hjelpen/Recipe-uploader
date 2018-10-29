@@ -34,13 +34,28 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
       //Get info for the user being viewed
       var customer = await _appDbContext.Customers.Include(c => c.Identity).Include(x => x.Identity.Recepies).SingleAsync(c => c.Identity.UserName == username);
 
+      //check if the user visiting another profile is logged in or not.
+      bool FollowStatus = false;
+      bool isAuthenticated = User.Identity.IsAuthenticated;
+      if(isAuthenticated == true)
+      {
+        var userId = _caller.Claims.Single(c => c.Type == "id");
+        var vistor = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+        UserFollower checkFollow = _appDbContext.UserFollowers.Where(x => x.AppUserId == vistor.IdentityId).Where(y => y.FollowerId == customer.IdentityId).FirstOrDefault();
+        if(checkFollow != null)
+        {
+          FollowStatus = true;
+        }
+
+      }
 
       UserViewModel userViewModel = new UserViewModel
       {
         PictureUrl = customer.Identity.PictureUrl,
         UserName = customer.Identity.UserName,
         Recepies = customer.Identity.Recepies,
-        Bio = customer.Identity.Bio
+        Bio = customer.Identity.Bio,
+        FollowStatus = FollowStatus       
       };
 
 

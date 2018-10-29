@@ -26,7 +26,13 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.userService1.getUser(this.username).subscribe((userDetail: UserDetails) => {
       this.data = userDetail;
-      console.log(this.data)
+      if (this.data.followStatus == true) {
+        this.followText = "Unfollow";
+      }
+      if (this.data.followStatus == false) {
+        this.followText = "Follow";
+      }
+      console.log(this.followText);
     });
 
     this.subscription = this.userService.authNavStatus$.subscribe(status => this.status = status);
