@@ -5,4 +5,5 @@ export interface FollowedListDetails {
   imageName: string;
   rating: number;
   averageRating: number;
+  totalViews: number;
 }

@@ -5,4 +5,5 @@ export interface HomeDetails {
   id: string;
   totalVotes: number;
   rating: number;
+  totalViews: number;
 }
