@@ -47,6 +47,10 @@ namespace AngularASPNETCore2WebApiAuth.Controllers
     public IActionResult GetRecpie([FromQuery] int id)
     {
       var result = _appDbContext.Recepies.Where(x => x.Id == id).Include(i => i.Ingridients).FirstOrDefault();
+      if(result == null)
+      {
+        return NotFound();
+      }
 
       result.TotalViews = result.TotalViews + 1;
       _appDbContext.SaveChanges();
